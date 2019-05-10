@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,14 +24,21 @@ public class UserResource {
 	private UserService service;
 	
 	@GetMapping("/users")
-	public ResponseEntity<List<User>> findAll(){
-		List<User> users = service.findAll();
+	public ResponseEntity<List<UserDTO>> findAll(){
+		List<User> users = service.buscarTodos();
 		List<UserDTO> listDTO = users.stream().map(x-> new UserDTO(x)).collect(Collectors.toList());
-		return ResponseEntity.ok(users);
+		return ResponseEntity.ok(listDTO);
 	}
 	
 	@RequestMapping(value="/users",method=RequestMethod.POST)
-	public void cadastro(@RequestBody User user) {
-		service.salvar(user);
+	public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
+		User user = service.fromDTO(userDTO);
+		return ResponseEntity.ok(new UserDTO(service.salvar(user)));
+	}
+	
+	@GetMapping("/users/{id}")
+	public ResponseEntity<UserDTO> findById(@PathVariable String id){
+		User user = service.buscarUsuarioPorId(id);
+		return ResponseEntity.ok(new UserDTO(user));
 	}
 }

@@ -21,16 +21,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		repository.deleteAll();
 		
 		User diego = new User("a", "b", "a@gmail.com");
-		User teste = new User("c", "d", "c@gmail.com");	
+		User teste = new User("c", "d", "c@gmail.com");
+		User testeAgora = new User("c", "d", "c@gmail.com");	
 		
 		createUserIfNotFound(diego);
 		createUserIfNotFound(teste);
+		createUserIfNotFound(testeAgora);
 	}
 	
 	private User createUserIfNotFound(final User user) {
 		Optional<User> userExists = repository.findByEmail(user.getEmail());
 		
+		
 		if(userExists.isPresent()) {
+			System.out.println("Email existente!");
 			return userExists.get();
 		}
 		

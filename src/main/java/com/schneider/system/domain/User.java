@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.schneider.system.dto.UserDTO;
+
 @Document
 public class User implements Serializable{
 
@@ -22,6 +24,13 @@ public class User implements Serializable{
 
 	public User() {
 //		super();
+	}
+	
+	public User(UserDTO userDTO) {
+		this.id = userDTO.getId();
+		this.firstName = userDTO.getFirstName();
+		this.lastName = userDTO.getLastName();
+		this.email = userDTO.getEmail();
 	}
 	
 	
