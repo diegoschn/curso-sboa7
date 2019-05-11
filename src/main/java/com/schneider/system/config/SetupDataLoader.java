@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.schneider.system.domain.Role;
 import com.schneider.system.domain.User;
@@ -22,6 +23,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		userRepository.deleteAll();
@@ -31,8 +35,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		Role user = createRoleIfNotFound("ROLE_USER");
 		
 		User diego = new User("a", "b", "a@gmail.com");
+		diego.setPassword(passwordEncoder.encode("123"));
+		diego.setEnabled(true);
 		User teste = new User("c", "d", "c@gmail.com");
-		User testeAgora = new User("c", "d", "c@gmail.com");
+		teste.setPassword(passwordEncoder.encode("234"));
+		teste.setEnabled(true);
 		
 		diego.setRoles(Arrays.asList(admin));
 		teste.setRoles(Arrays.asList(user));
@@ -40,7 +47,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		
 		createUserIfNotFound(diego);
 		createUserIfNotFound(teste);
-		createUserIfNotFound(testeAgora);
 		
 	}
 	

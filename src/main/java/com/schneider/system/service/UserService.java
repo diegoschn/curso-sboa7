@@ -38,7 +38,9 @@ public class UserService {
 	public User atualizar(User user) {
 		Optional<User> userExistente = repository.findById(user.getId());
 		
-		return userExistente.map(u->repository.save(new User(u.getId(),user.getFirstName(),user.getLastName(),user.getEmail()))).orElseThrow(()-> new ObjectNotFoundException("Usuário não encontrado"));
+		return userExistente.map(u->repository.save(new User(u.getId(),user.getFirstName(),user.getLastName(),user.getEmail(),
+				u.getPassword(),u.isEnabled())))
+				.orElseThrow(()-> new ObjectNotFoundException("Usuário não encontrado"));
 	}
 	
 	public void deletar(String id) {
