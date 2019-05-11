@@ -34,4 +34,18 @@ public class UserService {
 	public User fromDTO(UserDTO userDTO) {
 		return new User(userDTO);
 	}
+	
+	public User atualizar(User user) {
+		Optional<User> userExistente = repository.findById(user.getId());
+		
+		return userExistente.map(u->repository.save(new User(u.getId(),user.getFirstName(),user.getLastName(),user.getEmail()))).orElseThrow(()-> new ObjectNotFoundException("Usuário não encontrado"));
+	}
+	
+	public void deletar(String id) {
+		repository.deleteById(id);
+	}
+	
+	
+	
+	
 }
